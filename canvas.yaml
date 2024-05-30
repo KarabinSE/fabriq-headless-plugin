@@ -1,0 +1,30 @@
+preset: package
+
+namespace: Karabin\FabriqPlugin
+user-auth-model: App\Models\User
+
+paths:
+  src: src
+  resource: resources
+
+factory:
+  path: database/factories
+
+migration:
+  path: database/migrations
+  prefix: ""
+
+console:
+  namespace: Karabin\FabriqPlugin\Console
+
+model:
+  namespace: Karabin\FabriqPlugin\Models
+
+provider:
+  namespace: Karabin\FabriqPlugin\Providers
+
+testing:
+  namespace: Karabin\FabriqPlugin\Tests
+
+data:
+  namespace: Karabin\FabriqPlugin\Data
