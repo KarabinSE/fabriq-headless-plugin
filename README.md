@@ -24,7 +24,7 @@ use Karabin\FabriqPlugin\Http\Controllers\ContactController;
 
 // News
 Route::get('news', [NewsController::class, 'index']);
-Route::get('news/{slug}', [NewsController::class, 'show']);
+Route::get('news/{id}', [NewsController::class, 'show']);
 
 // Contacts
 Route::get('contacts', [ContactController::class, 'index']);
