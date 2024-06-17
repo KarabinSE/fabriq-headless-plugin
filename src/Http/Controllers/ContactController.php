@@ -12,7 +12,9 @@ class ContactController extends Controller
 
     public function index()
     {
-        $contacts = Fabriq::getFqnModel('contact')::where('published', 1)->get();
+        $contacts = Fabriq::getFqnModel('contact')::where('published', 1)
+            ->orderBy('sortindex')
+            ->get();
 
         return $this->respondWithCollection($contacts, Fabriq::getTransformerFor('contact'));
     }
