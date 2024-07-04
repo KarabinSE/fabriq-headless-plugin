@@ -14,7 +14,7 @@ class NewsController extends Controller
     {
         $articles = Fabriq::getFqnModel('article')::published()->paginate($this->number);
 
-        return $this->respondWithCollection($articles, Fabriq::getTransformerFor('article'));
+        return $this->respondWithPaginator($articles, Fabriq::getTransformerFor('article'));
     }
 
     public function show(int $id)
