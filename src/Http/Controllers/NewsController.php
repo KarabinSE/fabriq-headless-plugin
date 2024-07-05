@@ -17,10 +17,12 @@ class NewsController extends Controller
         return $this->respondWithPaginator($articles, Fabriq::getTransformerFor('article'));
     }
 
-    public function show(int $id)
+    public function show(string $slug)
     {
         $article = Fabriq::getFqnModel('article')::published()
-            ->whereId($id)
+            ->whereHas('slugs', function ($query) use ($slug) {
+                return $query->where('slug', $slug);
+            })
             ->firstOrFail();
 
         return $this->respondWithItem($article, Fabriq::getTransformerFor('article'));
