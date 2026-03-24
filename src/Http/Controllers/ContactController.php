@@ -2,13 +2,13 @@
 
 namespace Karabin\FabriqPlugin\Http\Controllers;
 
-use Ikoncept\Fabriq\Fabriq;
+use Karabin\Fabriq\Fabriq;
 use Illuminate\Routing\Controller;
-use Infab\Core\Traits\ApiControllerTrait;
+use Karabin\Fabriq\Data\ContactData;
+use Spatie\LaravelData\DataCollection;
 
 class ContactController extends Controller
 {
-    use ApiControllerTrait;
 
     public function index()
     {
@@ -16,7 +16,7 @@ class ContactController extends Controller
             ->orderBy('sortindex')
             ->get();
 
-        return $this->respondWithCollection($contacts, Fabriq::getTransformerFor('contact'));
+        return ContactData::collect($contacts, DataCollection::class)
     }
 
     public function show(int $id)
@@ -25,6 +25,6 @@ class ContactController extends Controller
             ->where('published', 1)
             ->firstOrFail();
 
-        return $this->respondWithItem($contact, Fabriq::getTransformerFor('contact'));
+        return ContactData::fromModel($contact);
     }
 }
