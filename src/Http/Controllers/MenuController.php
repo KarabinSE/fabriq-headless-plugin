@@ -2,7 +2,6 @@
 
 namespace Karabin\FabriqPlugin\Http\Controllers;
 
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Karabin\Fabriq\Data\MenuData;
@@ -20,10 +19,10 @@ class MenuController extends Controller
         return MenuData::collect($paginator, PaginatedDataCollection::class);
     }
 
-    public function show(Request $request, EloquentMenuRepository $menuRepo, string $slug): JsonResponse
+    public function show(Request $request, EloquentMenuRepository $menuRepo, string $slug)
     {
         $menu = $menuRepo->findBySlug($slug);
 
-        return response()->json(['data' => $menu]);
+        return response()->json($menu);
     }
 }
