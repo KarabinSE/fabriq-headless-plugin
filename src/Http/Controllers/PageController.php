@@ -21,6 +21,6 @@ class PageController extends Controller
 
         $result = $repo->findBySlug($slug);
 
-        return LivePageData::from($result);
+        return LivePageData::from($result)->wrap('data');
     }
 }
