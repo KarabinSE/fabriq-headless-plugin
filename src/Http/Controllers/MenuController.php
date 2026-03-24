@@ -2,29 +2,28 @@
 
 namespace Karabin\FabriqPlugin\Http\Controllers;
 
-use Ikoncept\Fabriq\Fabriq;
-use Ikoncept\Fabriq\Repositories\EloquentMenuRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Infab\Core\Traits\ApiControllerTrait;
+use Karabin\Fabriq\Data\MenuData;
+use Karabin\Fabriq\Fabriq;
+use Karabin\Fabriq\Repositories\EloquentMenuRepository;
+use Spatie\LaravelData\PaginatedDataCollection;
 
 class MenuController extends Controller
 {
-    use ApiControllerTrait;
-
-    public function index(Request $request): JsonResponse
+    public function index(Request $request)
     {
         $eagerLoad = $this->getEagerLoad(Fabriq::getFqnModel('menu')::RELATIONSHIPS);
-        $paginator = Fabriq::getFqnModel('menu')::with($eagerLoad)->paginate($this->number);
+        $paginator = Fabriq::getFqnModel('menu')::with($eagerLoad)->paginate($request->number, 25);
 
-        return $this->respondWithPaginator($paginator, Fabriq::getTransformerFor('menu'));
+        return MenuData::collect($paginator, PaginatedDataCollection::class);
     }
 
     public function show(Request $request, EloquentMenuRepository $menuRepo, string $slug): JsonResponse
     {
         $menu = $menuRepo->findBySlug($slug);
 
-        return $this->respondWithArray($menu);
+        return response()->json(['data' => $menu]);
     }
 }

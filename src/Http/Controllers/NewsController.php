@@ -2,19 +2,19 @@
 
 namespace Karabin\FabriqPlugin\Http\Controllers;
 
-use Ikoncept\Fabriq\Fabriq;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Infab\Core\Traits\ApiControllerTrait;
+use Karabin\Fabriq\Data\ArticleData;
+use Karabin\Fabriq\Fabriq;
+use Spatie\LaravelData\PaginatedDataCollection;
 
 class NewsController extends Controller
 {
-    use ApiControllerTrait;
-
-    public function index()
+    public function index(Request $request)
     {
-        $articles = Fabriq::getFqnModel('article')::published()->paginate($this->number);
+        $articles = Fabriq::getFqnModel('article')::published()->paginate($request->input('number', 25));
 
-        return $this->respondWithPaginator($articles, Fabriq::getTransformerFor('article'));
+        return ArticleData::collect($articles, PaginatedDataCollection::class);
     }
 
     public function show(string $slug)
@@ -25,6 +25,6 @@ class NewsController extends Controller
             })
             ->firstOrFail();
 
-        return $this->respondWithItem($article, Fabriq::getTransformerFor('article'));
+        return ArticleData::fromModel($article);
     }
 }
