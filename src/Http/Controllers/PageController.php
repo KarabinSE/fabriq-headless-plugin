@@ -5,7 +5,8 @@ namespace Karabin\FabriqPlugin\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Http;
-use Karabin\Fabriq\Data\LivePageData;
+use Karabin\Fabriq\ContentGetters\ContentResourceContext;
+use Karabin\Fabriq\Fabriq;
 use Karabin\Fabriq\Repositories\EloquentPageRepository;
 
 class PageController extends Controller
@@ -21,6 +22,12 @@ class PageController extends Controller
 
         $result = $repo->findBySlug($slug);
 
-        return LivePageData::from($result)->wrap('data');
+        return ContentResourceContext::withModels([$result], function () use ($result, $request) {
+            $result->content = $result->getFieldContent(app()->getLocale())->except('boxes');
+
+            return Fabriq::getDto('live_page')::fromModel($result)
+                ->wrap('data')
+                ->toResponse($request);
+        });
     }
 }
